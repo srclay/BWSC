@@ -1,0 +1,53 @@
+﻿#custom-bootstrap-menu.navbar-default .navbar-brand {
+    color: rgba(255, 255, 255, 1);
+}
+#custom-bootstrap-menu.navbar-default {
+    font-size: #ffffffpx;
+    background-color: rgba(248, 248, 248, 1);
+    background: -webkit-linear-gradient(top, rgba(4, 4, 252, 1) 0%, rgba(248, 248, 248, 1) 100%);
+    background: linear-gradient(to right, rgba(4, 4, 252, 1) 0%, rgba(248, 248, 248, 1) 100%);
+    border-width: 1px;
+    border-radius: #ffffffpx;
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
+    color: rgba(255, 255, 255, 1);
+    background-color:transparent
+}
+#custom-bootstrap-menu.navbar-default .navbar-right>li>a {
+    color: rgb(0, 0, 0);
+    background-color:transparent
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover,
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
+    color: #e58d87;
+    /*color: rgba(4, 4, 252, 1);*/
+    background-color:transparent
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a,
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:hover,
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:focus {
+    color: rgba(255, 255, 255, 1);
+    background-color:transparent
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle {
+    border-color: #f8f8f8;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle:hover,
+#custom-bootstrap-menu.navbar-default .navbar-toggle:focus {
+    background-color: #f8f8f8;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle .icon-bar {
+    background-color: #f8f8f8;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle:hover .icon-bar,
+#custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
+    background-color: #f8f8f8;
+}
+.navbar-custom .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+
+    color:#e58d87
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color:white;
+}

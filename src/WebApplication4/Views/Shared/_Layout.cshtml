@@ -8,36 +8,47 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/navbar.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/navbar.min.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">BWSC</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">News</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">Results</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="" asp-controller="Swimmers" asp-action="Create">Create Swimmer</a></li>
+    <div class="container" id="topContent" style="width:auto">
+        <h1>
+        <img id="topLogo" src="~/images/bwsc_logo.jpg" height="100" width="100" />
+                Bracknell and Wokingham Swimming Club
+        </h1>
+    </div>
+    <div class="container-fluid">
+        <div class="navbar navbar-default" id="custom-bootstrap-menu">
+            
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">BWSC</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="News">News</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">Results</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Shop">Shop</a></li>
+                        @*<li><a asp-area="" asp-controller="Swimmers" asp-action="Create">Create Swimmer</a></li>*@
 
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
+                    </ul>
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
+            
         </div>
     </div>
     <div class="container body-content">

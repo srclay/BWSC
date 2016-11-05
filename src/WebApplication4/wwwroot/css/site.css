@@ -41,14 +41,35 @@ textarea {
     width: 100%;
 }
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-  /* Hide captions */
-  .carousel-caption {
-    display: none
-  }
+#topContent {
+    text-align: center;
+    margin-left: 120px;
+    margin-right: 120px;
+}
+
+#topLogo {
+    position: absolute;
+    left: 15px;
+    top: 0px;
+    margin: 10px;
 }
 
 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
     width: 100%;
+}
+
+h1 {
+    color:#e58d87
+}
+
+h2 {
+    color:#e58d87
+}
+
+.h-divider{
+ margin-top:5px;
+ margin-bottom:5px;
+ height:1px;
+ width:100%;
+ border-top:1px solid gray;
 }

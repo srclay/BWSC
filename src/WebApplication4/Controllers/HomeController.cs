@@ -27,6 +27,11 @@ namespace BWSC.Controllers
             return View();
         }
 
+        public IActionResult News()
+        {
+            return View();
+        }
+
         public IActionResult Error()
         {
             return View();
