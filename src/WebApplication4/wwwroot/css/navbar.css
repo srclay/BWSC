@@ -13,9 +13,10 @@
     color: rgba(255, 255, 255, 1);
     background-color:transparent
 }
+
 #custom-bootstrap-menu.navbar-default .navbar-right>li>a {
     color: rgb(0, 0, 0);
-    background-color:transparent
+    background-color:transparent;
 }
 #custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover,
 #custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
