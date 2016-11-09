@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using BWSC.Data;
 using BWSC.Models;
 using BWSC.Services;
+using Microsoft.AspNetCore.Http;
+using BWSC.Logic;
 
 namespace BWSC
 {
@@ -48,13 +50,21 @@ namespace BWSC
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession();
+            
+
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<ShoppingCartActions>();
 
             services.AddDbContext<SwimmingClubContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +87,7 @@ namespace BWSC
             app.UseStaticFiles();
 
             app.UseIdentity();
-
+            app.UseSession();
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>

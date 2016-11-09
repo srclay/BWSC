@@ -50,8 +50,13 @@ textarea {
 #topLogo {
     position: absolute;
     left: 15px;
-    top: 0px;
+    top: 25px;
     margin: 10px;
+}
+
+#topBanner {
+    position:center;
+    top: 0px;
 }
 
 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
@@ -72,4 +77,10 @@ h2 {
  height:1px;
  width:100%;
  border-top:1px solid gray;
+}
+
+.thumbnail {
+    padding: 0;
+    width: 100px;
+    height: 100px;
 }

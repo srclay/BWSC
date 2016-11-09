@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BWSC.Data;
 using BWSC.Models;
 
-namespace WebApplication4.Controllers
+namespace BWSC.Controllers
 {
     public class SwimmersController : Controller 
     {

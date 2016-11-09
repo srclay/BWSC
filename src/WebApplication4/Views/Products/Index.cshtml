@@ -1,0 +1,52 @@
+@model IEnumerable<BWSC.Models.Product>
+
+@{
+    ViewData["Title"] = "Available Products";
+}
+
+<h2>Shop</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFileName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellingPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShortName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <img class="thumbnail" src="images\@Html.DisplayFor(modelItem => item.ImageFileName)" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellingPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShortName)
+            </td>
+            <td>
+                <a asp-action="AddToCart" asp-route-id="@item.ID">Add To Cart</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+    <a class="btn btn-default btn-sm" asp-area="" asp-controller="CartItems" asp-action="Index">
+        <span class="glyphicon glyphicon-shopping-cart"></span> @ViewData["CartCount"]
+    </a>
+

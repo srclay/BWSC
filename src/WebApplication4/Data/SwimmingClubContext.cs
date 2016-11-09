@@ -16,5 +16,7 @@ namespace BWSC.Data
         public DbSet<Swimmer> Swimmers { get; set; }
         public DbSet<Squad> Squads { get; set; }
         public DbSet<Coach> Coaches { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<CartItem> ShoppingCartItems { get; set; }
     }
 }

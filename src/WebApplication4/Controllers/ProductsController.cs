@@ -7,28 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BWSC.Data;
 using BWSC.Models;
+using BWSC.Logic;
+using Microsoft.AspNetCore.Http;
 
-namespace BWSC.Controllers
+namespace BWSC.Models
 {
-    public class CoachesController : Controller
+    public class ProductsController : Controller
     {
         private readonly SwimmingClubContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ShoppingCartActions usersShoppingCart;
 
-        public CoachesController(SwimmingClubContext context)
+        public ProductsController(SwimmingClubContext context, IHttpContextAccessor httpContextAccessor)
         {
-            _context = context;    
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
+            usersShoppingCart = new ShoppingCartActions(_httpContextAccessor, _context);
         }
 
-        // GET: Coaches
+        // GET: Products
         public async Task<IActionResult> Index()
         {
-            var swimmingClubContext = _context.Coaches
-                .Include(c => c.Squad)
-                .AsNoTracking();
-            return View(await swimmingClubContext.ToListAsync());
+            ViewData["CartCount"] = usersShoppingCart.GetCartItems().Count;
+            return View(await _context.Products.ToListAsync());
         }
 
-        // GET: Coaches/Details/5
+        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,69 +40,63 @@ namespace BWSC.Controllers
                 return NotFound();
             }
 
-            var coach = await _context.Coaches
-                .Include(sq => sq.Squad)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (coach == null)
+            var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(coach);
+            return View(product);
         }
 
-        // GET: Coaches/Create
+        // GET: Products/Create
         public IActionResult Create()
         {
-            PopulateSquadsDropDownList();
             return View();
         }
 
-        // POST: Coaches/Create
+        // POST: Products/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,SquadID,StartDate,Surname")] Coach coach)
+        public async Task<IActionResult> Create([Bind("ID,Description,ImageFileName,SellingPrice,ShortName")] Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(coach);
+                _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            PopulateSquadsDropDownList(coach.SquadID);
-            return View(coach);
+            return View(product);
         }
 
-        // GET: Coaches/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Products/AddToCart/5
+        public async Task<IActionResult> AddToCart(int? id)
         {
+            HttpContext.Session.SetString("a", "b");
             if (id == null)
             {
                 return NotFound();
             }
 
-            var coach = await _context.Coaches
-                .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (coach == null)
+            var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
+            if (product == null)
             {
                 return NotFound();
             }
-            PopulateSquadsDropDownList(coach.SquadID);
-            return View(coach);
+            usersShoppingCart.AddToCart(product.ID);
+            return RedirectToAction("Index");
         }
 
-        // POST: Coaches/Edit/5
+        // POST: Products/AddToCart/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,SquadID,StartDate,Surname")] Coach coach)
+        public async Task<IActionResult> AddToCart(int id, [Bind("ID,Description,ImageFileName,SellingPrice,ShortName")] Product product)
         {
-            if (id != coach.ID)
+            if (id != product.ID)
             {
                 return NotFound();
             }
@@ -107,12 +105,12 @@ namespace BWSC.Controllers
             {
                 try
                 {
-                    _context.Update(coach);
+                    _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CoachExists(coach.ID))
+                    if (!ProductExists(product.ID))
                     {
                         return NotFound();
                     }
@@ -123,19 +121,10 @@ namespace BWSC.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            PopulateSquadsDropDownList(coach.SquadID);
-            return View(coach);
+            return RedirectToAction("Index");
         }
 
-        private void PopulateSquadsDropDownList(object selectedSquad = null)
-        {
-            var squadsQuery = from sq in _context.Squads
-                              orderby sq.Name
-                              select sq;
-            ViewBag.SquadID = new SelectList(squadsQuery.AsNoTracking(), "ID", "Name", selectedSquad);
-        }
-
-        // GET: Coaches/Delete/5
+        // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,29 +132,29 @@ namespace BWSC.Controllers
                 return NotFound();
             }
 
-            var coach = await _context.Coaches.SingleOrDefaultAsync(m => m.ID == id);
-            if (coach == null)
+            var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(coach);
+            return View(product);
         }
 
-        // POST: Coaches/Delete/5
+        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var coach = await _context.Coaches.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Coaches.Remove(coach);
+            var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool CoachExists(int id)
+        private bool ProductExists(int id)
         {
-            return _context.Coaches.Any(e => e.ID == id);
+            return _context.Products.Any(e => e.ID == id);
         }
     }
 }

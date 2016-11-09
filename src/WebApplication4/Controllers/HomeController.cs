@@ -13,9 +13,9 @@ namespace BWSC.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult Results()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Results page.";
 
             return View();
         }
