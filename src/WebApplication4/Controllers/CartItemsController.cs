@@ -30,10 +30,18 @@ namespace BWSC.Controllers
             var swimmingClubContext = _context.ShoppingCartItems.Include(c => c.Product);
             var usersShoppingCart = new ShoppingCartActions(_httpContextAccessor, _context);
             var cartID = usersShoppingCart.GetCartId();
-            var cartItems = from i in _context.ShoppingCartItems select i;
+            //var cartItems = from i in _context.ShoppingCartItems select i;
 
-            cartItems = cartItems.Where(i => i.CartId.Equals(cartID));
-            return View(await cartItems.ToListAsync());
+            //cartItems = cartItems.Where(i => i.CartId.Equals(cartID));
+            //return View(await cartItems.ToListAsync());
+
+            var cart = await _context.ShoppingCartItems
+                .Include(pr => pr.Product)
+                .Where(i => i.CartId.Equals(cartID))
+                .AsNoTracking()
+                .ToListAsync();
+
+            return View(cart);
         }
 
         // GET: CartItems/Details/5

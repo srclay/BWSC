@@ -4,9 +4,12 @@
     ViewData["Title"] = "Available Products";
 }
 
-<h2>Shop<a class="btn btn-default btn-lg" asp-area="" asp-controller="CartItems" asp-action="Index">
-    <span class="glyphicon glyphicon-shopping-cart"></span> @ViewData["CartCount"]
-</a></h2>
+<h2>
+    Shop
+    <a class="btn btn-default btn-lg" asp-area="" asp-controller="CartItems" asp-action="Index" style="position:absolute;right:0px;">
+        <span class="glyphicon glyphicon-shopping-cart"></span> @ViewData["CartCount"]
+    </a>
+</h2>
 
 <table class="table">
     <thead>

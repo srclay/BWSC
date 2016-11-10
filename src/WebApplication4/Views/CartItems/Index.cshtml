@@ -1,45 +1,50 @@
 @model IEnumerable<BWSC.Models.CartItem>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Shopping Basket";
 }
 
-<h2>Index</h2>
+<h2>Shopping Basket</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CartId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                @Html.DisplayNameFor(model => model.Product.ShortName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.SellingPrice)
+            </th>
+            <th>
+                Total
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CartId)
+                <img class="thumbnail" src="images\@Html.DisplayFor(modelItem => item.Product.ImageFileName)" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
+                @Html.DisplayFor(modelItem => item.Product.ShortName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+                @Html.DisplayFor(modelItem => item.Product.SellingPrice)
+            </td>
+            <td>
+                @(item.Product.SellingPrice * item.Quantity)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.ItemId" class="glyphicon glyphicon-trash" ></a>
             </td>
         </tr>
 }

@@ -28,8 +28,23 @@ namespace BWSC.Models
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            ViewData["CartCount"] = usersShoppingCart.GetCartItems().Count;
-            return View(await _context.Products.ToListAsync());
+            var cartID = usersShoppingCart.GetCartId();
+            //ViewData["CartCount"] = usersShoppingCart.GetCartItems().Count;
+            List<Product> products = await _context.Products.ToListAsync();
+            List<CartItem> cartItems = await _context.ShoppingCartItems
+                .Where(i => i.CartId.Equals(cartID))
+                .ToListAsync();
+
+            var ProductsList = from p in products
+                        join c in cartItems on p.ID equals c.ProductId into cp
+                        from ProductCart in cp.DefaultIfEmpty()
+                        select new {p.ID,p.ShortName,p.Description,p.SellingPrice, p.ImageFileName
+                        , Quantity = (ProductCart == null ? 0 : ProductCart.Quantity
+                        ) };
+
+            ViewData["CartCount"] = ProductsList.Sum(cart => cart.Quantity);
+
+            return View(products);
         }
 
         // GET: Products/Details/5
