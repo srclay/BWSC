@@ -17,7 +17,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
+            <th class="hidden-xs">
                 @Html.DisplayNameFor(model => model.ImageFileName)
             </th>
             <th>
@@ -35,7 +35,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td>
+            <td class="hidden-xs">
                 <img class="thumbnail" src="images\@Html.DisplayFor(modelItem => item.ImageFileName)" />
             </td>
             <td>

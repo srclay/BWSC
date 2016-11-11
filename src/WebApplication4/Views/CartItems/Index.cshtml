@@ -9,7 +9,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th class="hidden-xs">
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Product.ShortName)
@@ -28,7 +28,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td class="hidden-xs">
                 <img class="thumbnail" src="images\@Html.DisplayFor(modelItem => item.Product.ImageFileName)" />
             </td>
             <td>
