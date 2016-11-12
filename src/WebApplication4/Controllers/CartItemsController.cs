@@ -44,6 +44,15 @@ namespace BWSC.Controllers
             return View(cart);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(List<CartItem> CartItems)
+        {
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
         // GET: CartItems/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -114,6 +123,48 @@ namespace BWSC.Controllers
                 return NotFound();
             }
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(cartItem);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CartItemExists(cartItem.ItemId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            ViewData["ProductId"] = new SelectList(_context.Products, "ID", "ID", cartItem.ProductId);
+            return View(cartItem);
+        }
+
+        // POST: CartItems/Update/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        public async Task<IActionResult> Update(string id,int qty)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cartItem = await _context.ShoppingCartItems.SingleOrDefaultAsync(m => m.ItemId == id);
+            if (cartItem == null)
+            {
+                return NotFound();
+            }
+
+            cartItem.Quantity = qty;
             if (ModelState.IsValid)
             {
                 try

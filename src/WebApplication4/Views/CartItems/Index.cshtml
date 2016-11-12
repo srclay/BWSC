@@ -5,48 +5,57 @@
 }
 
 <h2>Shopping Basket</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="hidden-xs">
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product.ShortName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product.SellingPrice)
+                </th>
+                <th>
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="hidden-xs">
+                        <input type="hidden" name="[@item].ItemId" value="@item.ItemId" />
+                        <input type="hidden" name="__RequestVerificationToken" value="......" />    
 
-<table class="table">
-    <thead>
-        <tr>
-            <th class="hidden-xs">
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product.ShortName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product.SellingPrice)
-            </th>
-            <th>
-                Total
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td class="hidden-xs">
-                <img class="thumbnail" src="images\@Html.DisplayFor(modelItem => item.Product.ImageFileName)" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.ShortName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.SellingPrice)
-            </td>
-            <td>
-                @(item.Product.SellingPrice * item.Quantity)
-            </td>
-            <td>
-                <a asp-action="Delete" asp-route-id="@item.ItemId" class="glyphicon glyphicon-trash" ></a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                        <img class="thumbnail" src="images\@Html.DisplayFor(modelItem => item.Product.ImageFileName)" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product.ShortName)
+                    </td>
+                    <td>
+                        <input
+                               type="number"
+                               name="quantity" 
+                               step="1" 
+                               value="@item.Quantity"
+                               id="quantity"
+                               onblur="UpdateQuantity('@(item.ItemId)',this.value)" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product.SellingPrice)
+                    </td>
+                    <td>
+                        @(item.Product.SellingPrice * item.Quantity)
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.ItemId" class="glyphicon glyphicon-trash"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
