@@ -18,5 +18,7 @@ namespace BWSC.Data
         public DbSet<Coach> Coaches { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<CartItem> ShoppingCartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
     }
 }

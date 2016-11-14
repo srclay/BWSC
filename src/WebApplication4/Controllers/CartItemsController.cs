@@ -30,10 +30,7 @@ namespace BWSC.Controllers
             var swimmingClubContext = _context.ShoppingCartItems.Include(c => c.Product);
             var usersShoppingCart = new ShoppingCartActions(_httpContextAccessor, _context);
             var cartID = usersShoppingCart.GetCartId();
-            //var cartItems = from i in _context.ShoppingCartItems select i;
 
-            //cartItems = cartItems.Where(i => i.CartId.Equals(cartID));
-            //return View(await cartItems.ToListAsync());
 
             var cart = await _context.ShoppingCartItems
                 .Include(pr => pr.Product)
@@ -41,15 +38,8 @@ namespace BWSC.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
+            ViewData["CartTotal"] = cart.Sum(c => c.Quantity * c.Product.SellingPrice);
             return View(cart);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Index(List<CartItem> CartItems)
-        {
-            _context.SaveChanges();
-            return RedirectToAction("Index");
         }
 
 
@@ -185,7 +175,6 @@ namespace BWSC.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ID", "ID", cartItem.ProductId);
             return View(cartItem);
         }
 
