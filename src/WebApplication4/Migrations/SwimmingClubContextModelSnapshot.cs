@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using BWSC.Data;
 
-namespace BWSC.Migrations
+namespace WebApplication4.Migrations
 {
     [DbContext(typeof(SwimmingClubContext))]
     partial class SwimmingClubContextModelSnapshot : ModelSnapshot
@@ -55,6 +55,82 @@ namespace BWSC.Migrations
                     b.ToTable("Coaches");
                 });
 
+            modelBuilder.Entity("BWSC.Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 70);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 40);
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 40);
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 160);
+
+                    b.Property<bool>("HasBeenShipped");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 160);
+
+                    b.Property<DateTime>("OrderDate");
+
+                    b.Property<string>("PaymentTransactionId");
+
+                    b.Property<string>("Phone")
+                        .HasAnnotation("MaxLength", 24);
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 10);
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 40);
+
+                    b.Property<decimal>("Total");
+
+                    b.Property<string>("Username");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("BWSC.Models.OrderDetail", b =>
+                {
+                    b.Property<int>("OrderDetailId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("OrderId");
+
+                    b.Property<int>("ProductId");
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<double?>("UnitPrice");
+
+                    b.Property<string>("Username");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderDetails");
+                });
+
             modelBuilder.Entity("BWSC.Models.Product", b =>
                 {
                     b.Property<int>("ID")
@@ -64,45 +140,13 @@ namespace BWSC.Migrations
 
                     b.Property<string>("ImageFileName");
 
-                    b.Property<int>("ProductOptionGroupID");
-
                     b.Property<decimal>("SellingPrice");
 
                     b.Property<string>("ShortName");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ProductOptionGroupID");
-
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("BWSC.Models.ProductOptionGroup", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("GroupName");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("ProductOptionGroup");
-                });
-
-            modelBuilder.Entity("BWSC.Models.ProductOptionValue", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("ProductOptionGroupID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ProductOptionGroupID");
-
-                    b.ToTable("ProductOptionValue");
                 });
 
             modelBuilder.Entity("BWSC.Models.Squad", b =>
@@ -159,19 +203,11 @@ namespace BWSC.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("BWSC.Models.Product", b =>
+            modelBuilder.Entity("BWSC.Models.OrderDetail", b =>
                 {
-                    b.HasOne("BWSC.Models.ProductOptionGroup", "ProductOptionGroup")
-                        .WithMany("Products")
-                        .HasForeignKey("ProductOptionGroupID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("BWSC.Models.ProductOptionValue", b =>
-                {
-                    b.HasOne("BWSC.Models.ProductOptionGroup", "ProductOptionGroup")
-                        .WithMany("ProductOptionValues")
-                        .HasForeignKey("ProductOptionGroupID")
+                    b.HasOne("BWSC.Models.Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

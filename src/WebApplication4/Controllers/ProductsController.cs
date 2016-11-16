@@ -9,6 +9,8 @@ using BWSC.Data;
 using BWSC.Models;
 using BWSC.Logic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BWSC.Models
 {
@@ -17,18 +19,27 @@ namespace BWSC.Models
         private readonly SwimmingClubContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ShoppingCartActions usersShoppingCart;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public ProductsController(SwimmingClubContext context, IHttpContextAccessor httpContextAccessor)
+        public ProductsController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            SwimmingClubContext context, 
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
+            _signInManager = signInManager;
             usersShoppingCart = new ShoppingCartActions(_httpContextAccessor, _context);
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var cartID = usersShoppingCart.GetCartId();
+            var user = await GetCurrentUserAsync();
+            var cartID = usersShoppingCart.GetCartId(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
             //ViewData["CartCount"] = usersShoppingCart.GetCartItems().Count;
             List<Product> products = await _context.Products.ToListAsync();
             List<CartItem> cartItems = await _context.ShoppingCartItems
@@ -100,7 +111,7 @@ namespace BWSC.Models
             {
                 return NotFound();
             }
-            usersShoppingCart.AddToCart(product.ID);
+            usersShoppingCart.AddToCart(product.ID, this.User.FindFirstValue(ClaimTypes.NameIdentifier));
             return RedirectToAction("Index");
         }
 
@@ -170,6 +181,11 @@ namespace BWSC.Models
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ID == id);
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }

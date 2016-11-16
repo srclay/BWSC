@@ -9,27 +9,40 @@ using BWSC.Data;
 using BWSC.Models;
 using Microsoft.AspNetCore.Http;
 using BWSC.Logic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BWSC.Controllers
 {
+    [Authorize]
     public class CartItemsController : Controller
     {
         private readonly SwimmingClubContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public CartItemsController(SwimmingClubContext context, IHttpContextAccessor httpContextAccessor)
+        public CartItemsController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            SwimmingClubContext context,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: CartItems
         public async Task<IActionResult> Index()
         {
             var swimmingClubContext = _context.ShoppingCartItems.Include(c => c.Product);
+            var user = await GetCurrentUserAsync();
             var usersShoppingCart = new ShoppingCartActions(_httpContextAccessor, _context);
-            var cartID = usersShoppingCart.GetCartId();
+            var cartID = usersShoppingCart.GetCartId(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
 
             var cart = await _context.ShoppingCartItems
@@ -210,5 +223,13 @@ namespace BWSC.Controllers
         {
             return _context.ShoppingCartItems.Any(e => e.ItemId == id);
         }
+        #region Helpers
+
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
+
+        #endregion
     }
 }
