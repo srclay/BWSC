@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using BWSC.Models;
 using BWSC.Models.ManageViewModels;
 using BWSC.Services;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace BWSC.Controllers
 {
@@ -83,7 +83,7 @@ namespace BWSC.Controllers
                     message = ManageMessageId.RemoveLoginSuccess;
                 }
             }
-            return RedirectToAction(nameof(ManageLogins), new { Message = message });
+            return RedirectToAction(nameof(ManageExternalLogins), new { Message = message });
         }
 
         //
@@ -272,10 +272,18 @@ namespace BWSC.Controllers
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
-
-        //GET: /Manage/ManageLogins
+        //Get: /Manage/ManageLogins
         [HttpGet]
-        public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
+        public async Task<IActionResult> ManageLogins()
+        {
+            var _userLogins = await _userManager.Users.ToListAsync();
+            return View(new IndexViewModel { });
+
+            //userLogins = _userLogins
+        }
+        //GET: /Manage/ManageExternalLogins
+        [HttpGet]
+        public async Task<IActionResult> ManageExternalLogins(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
@@ -290,7 +298,7 @@ namespace BWSC.Controllers
             var userLogins = await _userManager.GetLoginsAsync(user);
             var otherLogins = _signInManager.GetExternalAuthenticationSchemes().Where(auth => userLogins.All(ul => auth.AuthenticationScheme != ul.LoginProvider)).ToList();
             ViewData["ShowRemoveButton"] = user.PasswordHash != null || userLogins.Count > 1;
-            return View(new ManageLoginsViewModel
+            return View(new ManageExternalLoginsViewModel
             {
                 CurrentLogins = userLogins,
                 OtherLogins = otherLogins
@@ -322,11 +330,11 @@ namespace BWSC.Controllers
             var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
             if (info == null)
             {
-                return RedirectToAction(nameof(ManageLogins), new { Message = ManageMessageId.Error });
+                return RedirectToAction(nameof(ManageExternalLogins), new { Message = ManageMessageId.Error });
             }
             var result = await _userManager.AddLoginAsync(user, info);
             var message = result.Succeeded ? ManageMessageId.AddLoginSuccess : ManageMessageId.Error;
-            return RedirectToAction(nameof(ManageLogins), new { Message = message });
+            return RedirectToAction(nameof(ManageExternalLogins), new { Message = message });
         }
 
         #region Helpers

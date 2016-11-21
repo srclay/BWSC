@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BWSC.Models.ManageViewModels
 {
-    public class ManageLoginsViewModel
+    public class ManageExternalLoginsViewModel
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }
 

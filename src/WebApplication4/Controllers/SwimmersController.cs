@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BWSC.Data;
 using BWSC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BWSC.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class SwimmersController : Controller 
     {
         private readonly SwimmingClubContext _context;

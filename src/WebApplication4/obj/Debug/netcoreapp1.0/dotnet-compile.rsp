@@ -265,7 +265,7 @@ C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebAppl
 C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebApplication4\Models\ManageViewModels\ConfigureTwoFactorViewModel.cs
 C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebApplication4\Models\ManageViewModels\FactorViewModel.cs
 C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebApplication4\Models\ManageViewModels\IndexViewModel.cs
-C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebApplication4\Models\ManageViewModels\ManageLoginsViewModel.cs
+C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebApplication4\Models\ManageViewModels\ManageExternalLoginsViewModel.cs
 C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebApplication4\Models\ManageViewModels\RemoveLoginViewModel.cs
 C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebApplication4\Models\ManageViewModels\SetPasswordViewModel.cs
 C:\Users\SClay\Documents\Visual Studio 2015\Projects\WebApplication4\src\WebApplication4\Models\ManageViewModels\VerifyPhoneNumberViewModel.cs
