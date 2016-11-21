@@ -75,18 +75,18 @@ namespace BWSC.Logic
         {
             if (_userId == null)
             {
-                if (_session.GetString("CartID") == null)
+                if (_session.GetString(CartSessionKey) == null)
                 {
                     // Generate a new random GUID using System.Guid class.     
                     Guid tempCartId = Guid.NewGuid();
-                    _session.SetString("CartID", tempCartId.ToString());
+                    _session.SetString(CartSessionKey, tempCartId.ToString());
                 }
             }
             else
             {
-                _session.SetString("CartID", _userId);
+                _session.SetString(CartSessionKey, _userId);
             }
-            return _session.GetString("CartID").ToString();
+            return _session.GetString(CartSessionKey).ToString();
         }
 
         public List<CartItem> GetCartItems()
@@ -95,6 +95,18 @@ namespace BWSC.Logic
 
             return _context.ShoppingCartItems.Where(
                 c => c.CartId == ShoppingCartId).ToList();
+        }
+
+        public void MigrateCart(String userId)
+        {
+            var cartId = _session.GetString(CartSessionKey);
+            var shoppingCart = _context.ShoppingCartItems.Where(c => c.CartId == cartId);
+            foreach (CartItem item in shoppingCart)
+            {
+                item.CartId = userId;
+            }
+            _session.SetString(CartSessionKey, userId);
+            _context.SaveChanges();
         }
 
     }

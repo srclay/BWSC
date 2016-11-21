@@ -15,7 +15,6 @@ using System.Security.Claims;
 
 namespace BWSC.Controllers
 {
-    [Authorize]
     public class CartItemsController : Controller
     {
         private readonly SwimmingClubContext _context;
@@ -42,7 +41,8 @@ namespace BWSC.Controllers
             var swimmingClubContext = _context.ShoppingCartItems.Include(c => c.Product);
             var user = await GetCurrentUserAsync();
             var usersShoppingCart = new ShoppingCartActions(_httpContextAccessor, _context);
-            var cartID = usersShoppingCart.GetCartId(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            //var cartID = usersShoppingCart.GetCartId(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var cartID = usersShoppingCart.GetCartId(null);
 
 
             var cart = await _context.ShoppingCartItems

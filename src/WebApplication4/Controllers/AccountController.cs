@@ -11,6 +11,9 @@ using Microsoft.Extensions.Logging;
 using BWSC.Models;
 using BWSC.Models.AccountViewModels;
 using BWSC.Services;
+using BWSC.Logic;
+using BWSC.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace BWSC.Controllers
 {
@@ -22,19 +25,25 @@ namespace BWSC.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly SwimmingClubContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            SwimmingClubContext context,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         //
@@ -45,6 +54,13 @@ namespace BWSC.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             return View();
+        }
+        public IActionResult MigrateCart(string returnUrl = null)
+        { 
+            var userID = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usersShoppingCart = new ShoppingCartActions(_httpContextAccessor, _context);
+            usersShoppingCart.MigrateCart(userID);
+            return RedirectToLocal(returnUrl);
         }
 
         //
@@ -63,7 +79,8 @@ namespace BWSC.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("MigrateCart");
+                    //return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
