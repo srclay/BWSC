@@ -10,10 +10,11 @@ using BWSC.Models;
 using BWSC.Models.ManageViewModels;
 using BWSC.Services;
 using Microsoft.EntityFrameworkCore;
+using BWSC.Data;
 
 namespace BWSC.Controllers
 {
-    [Authorize]
+    
     public class ManageController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -21,19 +22,31 @@ namespace BWSC.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public ManageController(
+        ApplicationDbContext context,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
         ILoggerFactory loggerFactory)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+        }
+        //
+        // GET: /Manage/Index
+        [HttpGet]
+        public IActionResult ListUsers()
+        {
+            //var users = _context.Roles.SingleOrDefault(m => m.Name == "User");
+            var users = _userManager.Users.ToList();
+            return View(users);
         }
 
         //
@@ -271,15 +284,6 @@ namespace BWSC.Controllers
                 return View(model);
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
-        }
-        //Get: /Manage/ManageLogins
-        [HttpGet]
-        public async Task<IActionResult> ManageLogins()
-        {
-            var _userLogins = await _userManager.Users.ToListAsync();
-            return View(new IndexViewModel { });
-
-            //userLogins = _userLogins
         }
         //GET: /Manage/ManageExternalLogins
         [HttpGet]
