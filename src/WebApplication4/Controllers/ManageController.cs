@@ -42,16 +42,6 @@ namespace BWSC.Controllers
         //
         // GET: /Manage/Index
         [HttpGet]
-        public IActionResult ListUsers()
-        {
-            //var users = _context.Roles.SingleOrDefault(m => m.Name == "User");
-            var users = _userManager.Users.ToList();
-            return View(users);
-        }
-
-        //
-        // GET: /Manage/Index
-        [HttpGet]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
