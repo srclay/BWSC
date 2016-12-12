@@ -11,6 +11,7 @@ using BWSC.Models.ManageViewModels;
 using BWSC.Services;
 using Microsoft.EntityFrameworkCore;
 using BWSC.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BWSC.Controllers
 {
@@ -58,6 +59,7 @@ namespace BWSC.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(Id);
+            populateRolesDropDownList(user);
             return View(user);
         
         }
@@ -104,6 +106,16 @@ namespace BWSC.Controllers
             return View();
         }
 
+        private void populateRolesDropDownList(ApplicationUser user)
+        {
+            var list = ApplicationDbContext.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
+new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            ViewBag.Roles = list;
+
+
+            //var roles = user.Roles;
+            //ViewBag.RoleID = roles.ToList();
+        }
        
        
         //
