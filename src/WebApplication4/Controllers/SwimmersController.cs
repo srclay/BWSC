@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BWSC.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Admin")]
     public class SwimmersController : Controller 
     {
         private readonly SwimmingClubContext _context;
