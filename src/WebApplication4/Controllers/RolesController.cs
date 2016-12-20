@@ -41,6 +41,7 @@ namespace BWSC.Controllers
             {
                 var role = new IdentityRole(collection["RoleName"]);
                 //await roleManager.CreateAsync
+                //_context.Roles.Add(role
                 _context.Roles.Add(new Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole()
                 {
                     Name = collection["RoleName"]
