@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole
+@{
     ViewBag.Title = "Create";
 }
 @Html.Partial("_Admin")
@@ -6,7 +7,7 @@
     <h2>Create Role</h2>
     @Html.ActionLink("List Roles", "Index") | @Html.ActionLink("Manage User Role", "ManageUserRoles")
     <hr />
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Create","Roles"))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
@@ -15,7 +16,7 @@
             Role name
         </div>
         <p>
-            @Html.TextBox("RoleName")
+           @Html.TextBoxFor(model => model.Name)
         </p>
         <input type="submit" value="Save" />
     }

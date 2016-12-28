@@ -14,11 +14,14 @@ namespace BWSC.Controllers
     public class RolesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _RoleManager;
 
         public RolesController(
+            RoleManager<IdentityRole> RoleManager,
             ApplicationDbContext context)
         {
             _context = context;
+            _RoleManager = RoleManager;
         }
         public IActionResult Index()
         {
@@ -35,18 +38,18 @@ namespace BWSC.Controllers
         //
         // POST: /Roles/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public async Task<ActionResult> Create(Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole role)
         {
             try
             {
-                var role = new IdentityRole(collection["RoleName"]);
-                //await roleManager.CreateAsync
+                //var role = new IdentityRole(collection["RoleName"]);
+                await _RoleManager.CreateAsync(role);
                 //_context.Roles.Add(role
-                _context.Roles.Add(new Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole()
-                {
-                    Name = collection["RoleName"]
-                });
-                _context.SaveChanges();
+                //_context.Roles.Add(new Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole()
+                //{
+                    //Name = collection["RoleName"]
+                //});
+                //_context.SaveChanges();
                 ViewBag.ResultMessage = "Role created successfully !";
                 return RedirectToAction("Index");
             }

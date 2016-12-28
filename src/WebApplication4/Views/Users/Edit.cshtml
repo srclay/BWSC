@@ -20,28 +20,7 @@
                     <span asp-validation-for="Email" class="text-danger" />
                 </div>
             </div>
-            <div class="form-group">
-                @Html.DropDownList("RoleName", (IEnumerable<SelectListItem>)ViewBag.Roles, "Select ...")
-            </div>
-
-                @foreach (var role in Model.Roles)
-            {
-                    <p>
-                        <strong>
-                            @role.RoleId <br />
-                        </strong>
-                    </p>
-                }
-                <!--<div class="form-group">
-            <label asp-for="Roles" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="Roles.Id" class="form-control" asp-items="ViewBag.Id">
-                    <option value="">-- Select Squad --</option>
-                </select>
-                <span asp-validation-for="Id" class="text-danger" />
-            </div>
-        </div>-->
-
+            
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Save" class="btn btn-default" />

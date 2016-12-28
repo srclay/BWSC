@@ -59,7 +59,7 @@ namespace BWSC.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(Id);
-            populateRolesDropDownList(user);
+            //populateRolesDropDownList(user);
             return View(user);
         
         }
@@ -70,6 +70,7 @@ namespace BWSC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string Id, [Bind("Id,Email")] ApplicationUser updatedUser)
         {
+            //var name = RoleName;
             if (Id != updatedUser.Id)
             {
                 return NotFound();
@@ -109,10 +110,8 @@ namespace BWSC.Controllers
         private void populateRolesDropDownList(ApplicationUser user)
         {
             var list = ApplicationDbContext.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
-new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
-
-
             //var roles = user.Roles;
             //ViewBag.RoleID = roles.ToList();
         }
