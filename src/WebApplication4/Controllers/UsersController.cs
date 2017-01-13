@@ -48,6 +48,31 @@ namespace BWSC.Controllers
             var users = _userManager.Users.ToList();
             return View(users);
         }
+        // GET: /Users/Delete
+        [HttpGet]
+        public async Task<IActionResult> Delete(string Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(Id);
+            //populateRolesDropDownList(user);
+            return View(user);
+
+        }
+
+        // POST: /Users/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+            var result = await _userManager.DeleteAsync(user);
+            return RedirectToAction("Index");
+        }
+
 
         // GET: /Users/Edit
         [HttpGet]
